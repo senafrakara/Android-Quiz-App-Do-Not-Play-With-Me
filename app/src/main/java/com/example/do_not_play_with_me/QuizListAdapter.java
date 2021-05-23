@@ -16,6 +16,11 @@ import java.util.List;
 public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizViewHolder> {
 
     private List<QuizListModel> quizListModelList;
+    private OnQuizListItemClicked onQuizListItemClicked;
+
+    public QuizListAdapter(OnQuizListItemClicked onQuizListItemClicked){
+        this.onQuizListItemClicked= onQuizListItemClicked;
+    }
 
     public void setQuizListModelList(List<QuizListModel> quizListModelList) {
         this.quizListModelList = quizListModelList;
@@ -31,17 +36,6 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
     @Override
     public void onBindViewHolder(@NonNull QuizViewHolder holder, int position) {
 
-        holder.listTitle.setText(quizListModelList.get(position).getName());
-
-        String list_description = quizListModelList.get(position).getDescription();
-        if(list_description.length() > 150){
-
-            list_description = list_description.substring(0,150).concat("...");
-        }
-        holder.listLevel.setText(list_description);
-
-        holder.listLevel.setText(quizListModelList.get(position).getLevel());
-
         String image_url = quizListModelList.get(position).getImage();
         Glide
                 .with(holder.itemView.getContext())
@@ -49,6 +43,19 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
                 .centerCrop()
                 .placeholder(R.drawable.placeholder_image)
                 .into(holder.listImageView);
+
+        holder.listTitle.setText(quizListModelList.get(position).getName());
+
+        String list_description = quizListModelList.get(position).getDescription();
+        if(list_description.length() > 150){
+
+            list_description = list_description.substring(0,150).concat("...");
+        }
+        holder.listDesc.setText(list_description);
+
+        holder.listLevel.setText(quizListModelList.get(position).getLevel());
+
+
 
     }
 
@@ -62,7 +69,7 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
        }
     }
 
-    public class QuizViewHolder extends  RecyclerView.ViewHolder { //view da present edilen itemları initialize ediyoruz
+    public class QuizViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener { //view da present edilen itemları initialize ediyoruz
         private ImageView listImageView;
         private TextView listTitle;
         private TextView listDesc;
@@ -76,6 +83,16 @@ public class QuizListAdapter extends RecyclerView.Adapter<QuizListAdapter.QuizVi
             listDesc = itemView.findViewById(R.id.list_desc);
             listLevel = itemView.findViewById(R.id.list_difficulty);
             listBtn = itemView.findViewById(R.id.list_btn);
+            listBtn.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onQuizListItemClicked.onItemClicked(getAdapterPosition());
+        }
+    }
+
+    public interface OnQuizListItemClicked{
+        void onItemClicked(int position);
     }
 }
