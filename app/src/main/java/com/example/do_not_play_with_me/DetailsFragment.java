@@ -124,6 +124,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
                 DetailsFragmentDirections.ActionDetailsFragmentToQuizFragment actionDetailsFragmentToQuizFragment = DetailsFragmentDirections.actionDetailsFragmentToQuizFragment();
                 actionDetailsFragmentToQuizFragment.setTotalQuestions(totalQuestions); //position ı onclicklistener dan aldık argümanı pass ediyoruz burada
                 actionDetailsFragmentToQuizFragment.setQuizId(quizId);
+                actionDetailsFragmentToQuizFragment.setQuizName(quizName);
                 navController.navigate(actionDetailsFragmentToQuizFragment);
                 break;
         }
